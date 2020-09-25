@@ -9,10 +9,27 @@ public class StudentProcessing {
     ExcelReadWriteDemo excelReadWriteDemo = new ExcelReadWriteDemo();
     ITextPdfDemo iTextPdfDemo = new ITextPdfDemo();
 
-    public List<Student> inputStudent() {
 
-        String fileName = "src/files/student_input_list.xlsx";
-        return excelReadWriteDemo.createStudentListFromExcel(fileName);
+
+    public void processEveryThingBeforeExam() {
+        String inputFileName = "src/files/student_input_list.xlsx";
+        String inputSheetName = "class_ten";
+
+        processStudentFromExcelFile(inputFileName, inputSheetName);
+
+
+    }
+
+    public void processStudentFromExcelFile(String fileName, String sheetName) {
+        List<Student> studentList = excelReadWriteDemo.createStudentListFromExcel(fileName, sheetName);
+        List<Student> sortedStudentList = getSortStudentList(studentList);
+        createRollAndRegNo(sortedStudentList);
+
+        String outputPdfFileName = "src/admitCards/ClassFive.pdf";
+        String outputExcelFileName = "src/admitCards/class_five_list.xlsx";
+        String outputSheetName = "class_five";
+
+        printFinalStudentList(sortedStudentList, outputPdfFileName, outputExcelFileName, "Five", outputSheetName);
     }
 
     public List<Student> getSortStudentList(List<Student> studentList) {
@@ -86,17 +103,34 @@ public class StudentProcessing {
         }
     }
 
-    public void printFinalStudentList(List<Student> studentList) {
-        String pdfFileName = "src/admitCards/ClassFive.pdf";
-        String excelFileName = "src/admitCards/student_excel_list.xlsx";
+    public void printFinalStudentList(List<Student> studentList, String pdfFileName, String excelFileName, String className, String sheetName) {
         try {
-            iTextPdfDemo.createPdf(studentList, pdfFileName, "Five");
-            excelReadWriteDemo.generateStudentExcelFile(studentList, excelFileName);
+            iTextPdfDemo.createPdf(studentList, pdfFileName, className);
+            excelReadWriteDemo.generateStudentExcelFile(studentList, excelFileName, sheetName);
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (DocumentException e) {
             e.printStackTrace();
         }
+    }
+
+    public void printResultSheet() {
+        String excelFileName = "src/admitCards/student_excel_list.xlsx";
+        List<Student> studentList = excelReadWriteDemo.createStudentListFromExcelWithMarks(excelFileName);
+        System.out.println("Marks: ");
+
+        Collections.sort(studentList, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                return (int) (o2.getMarks()-o1.getMarks());
+            }
+        });
+        for (Student student : studentList) {
+            System.out.println(student.getRoleNo() + " " + student.getMarks());
+        }
+
+        String pdfFileName = "src/admitCards/final_result_sheet_five.pdf";
+        iTextPdfDemo.generateFinalResultSheet(studentList, "FIVE", pdfFileName);
     }
 }

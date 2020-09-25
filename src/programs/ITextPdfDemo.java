@@ -16,7 +16,8 @@ public class ITextPdfDemo {
 
         Rectangle pageSize = new Rectangle(594, 423);
         pageSize.setBackgroundColor(new BaseColor(230, 230, 250));
-        Document document = new Document(pageSize, 25, 25, 25, 25);
+        float margin = 25;
+        Document document = new Document(pageSize, margin, margin, margin, margin);
 
         BaseFont scriptMTBold = BaseFont.createFont("src/resources/ScriptMTBold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         BaseFont oldEnglish = BaseFont.createFont("src/resources/OLDENGL.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -24,7 +25,6 @@ public class ITextPdfDemo {
         Font font = new Font(Font.FontFamily.TIMES_ROMAN,10f, Font.ITALIC, BaseColor.BLACK);
 
         Font oldEnglish25 = new Font(oldEnglish, 25, Font.NORMAL, BaseColor.BLACK);
-        Font oldEnglish12 = new Font(oldEnglish, 12, Font.NORMAL, BaseColor.BLACK);
         Font oldEnglishIT18 = new Font(oldEnglish, 18, Font.ITALIC, BaseColor.BLACK);
         Font scriptMTBold11 = new Font(scriptMTBold, 11, Font.NORMAL, BaseColor.BLACK);
 
@@ -161,6 +161,96 @@ public class ITextPdfDemo {
         }
 
         document.close();
+    }
+
+    public void generateFinalResultSheet(List<Student> studentList, String className, String filename) {
+        float margin = 25;
+        Document document = new Document(PageSize.A4, margin, margin, margin, margin);
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+            document.open();
+
+            Image logoImage = Image.getInstance("src/files/amar_ami_white.png");
+            Font largeFont = new Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.NORMAL, BaseColor.BLACK);
+            Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.NORMAL, BaseColor.BLACK);
+
+
+            logoImage.setAlignment(Element.ALIGN_LEFT);
+            logoImage.setBorderWidth(18);
+
+
+            PdfPTable imageTable = new PdfPTable(2);
+            imageTable.setWidthPercentage(100);
+            imageTable.setWidths(new int[]{1, 4});
+
+            PdfPCell imageCell = new PdfPCell();
+            imageCell.addElement(logoImage);
+            imageCell.setBorder(PdfPCell.NO_BORDER);
+            imageTable.addCell(imageCell);
+
+            PdfPCell textCell = new PdfPCell();
+            Paragraph paragraph = new Paragraph("Amar Ami\n", largeFont);
+            paragraph.add(new Chunk("Talent Evaluation Exam - 2020\n", largeFont));
+            paragraph.add(new Chunk("Result Sheet (Class : " +className+")\n", largeFont));
+            paragraph.setAlignment(Element.ALIGN_CENTER);
+            textCell.addElement(paragraph);
+            textCell.setBorder(Rectangle.NO_BORDER);
+
+
+            imageTable.addCell(textCell);
+            imageTable.setSpacingAfter(20);
+
+
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.setWidths(new int[] {2, 10, 10, 3, 3});
+
+            PdfPCell cell;
+
+            cell = new PdfPCell(new Phrase("Sl.", normalFont));
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Name", normalFont));
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("School", normalFont));
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Roll No.", normalFont));
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Marks", normalFont));
+            table.addCell(cell);
+
+            int i = 1;
+            for (Student student : studentList) {
+                cell = new PdfPCell(new Phrase(i + ".", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(student.getName(), normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(student.getSchoolName(), normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(String.valueOf(student.getRoleNo()), normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(String.valueOf(student.getMarks()), normalFont));
+                table.addCell(cell);
+
+                i++;
+            }
+
+            document.add(imageTable);
+            document.add(table);
+
+            document.close();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

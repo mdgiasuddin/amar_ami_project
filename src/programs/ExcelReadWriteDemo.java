@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ExcelReadWriteDemo {
 
-    public void generateStudentExcelFile(List<Student> studentList, String fileName) {
+    List<String[]> createExcelRowList(List<Student> studentList) {
         List<String[]> allRowList = new ArrayList<>();
 
         String [] headerRow = new String[] {"Sl.", "Name", "School Name", "School Roll No.", "Roll No", "Registration No"};
@@ -29,13 +29,40 @@ public class ExcelReadWriteDemo {
             i++;
         }
 
-        generateExcelFileFromList(allRowList, fileName);
+        return allRowList;
     }
 
-    public void generateExcelFileFromList(List<String[]> allRowList, String fileName){
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet();
+    List<String[]> createExcelRowListForResultSheet(List<Student> studentList) {
+        List<String[]> allRowList = new ArrayList<>();
 
+        String [] headerRow = new String[] {"Sl.", "Name", "School Name", "Registration No", "Roll No", "Marks"};
+
+        allRowList.add(headerRow);
+
+        int i = 1;
+        for (Student student : studentList) {
+            String [] otherRow = new String[] {i+".", student.getName(), student.getSchoolName(), String.valueOf(student.getRegNo())
+                    , String.valueOf(student.getRoleNo()), ""};
+
+            allRowList.add(otherRow);
+            i++;
+        }
+
+        return allRowList;
+    }
+
+    public void generateStudentExcelFile(List<Student> studentList, String fileName, String sheetName) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet(sheetName + "_student_list");
+        List<String[]> allRowList = createExcelRowList(studentList);
+        generateExcelFileFromList(workbook, sheet, allRowList, fileName);
+
+        XSSFSheet sheetResult = workbook.createSheet(sheetName + "_result_input");
+        allRowList = createExcelRowListForResultSheet(studentList);
+        generateExcelFileFromList(workbook, sheetResult, allRowList, fileName);
+    }
+
+    public void generateExcelFileFromList( XSSFWorkbook workbook, XSSFSheet sheet, List<String[]> allRowList, String fileName){
 
         int i = 0, j;
         XSSFRow row;
@@ -60,16 +87,17 @@ public class ExcelReadWriteDemo {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    public List<Student> createStudentListFromExcel(String fileName) {
+    public List<Student> createStudentListFromExcel(String fileName, String sheetName) {
         List<Student> studentList = new ArrayList<>();
         try {
             File file = new File(fileName);
             FileInputStream fileInputStream = new FileInputStream(file);
 
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-            XSSFSheet xssfSheet = workbook.getSheet("student");
+            XSSFSheet xssfSheet = workbook.getSheet(sheetName);
 
             Iterator<Row> rowIterator = xssfSheet.iterator();
 
@@ -82,6 +110,40 @@ public class ExcelReadWriteDemo {
                 int schoolRollNo = (int) row.getCell(2).getNumericCellValue();
 
                 Student student = new Student(studentName, schoolName, schoolRollNo);
+                studentList.add(student);
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
+
+    public List<Student> createStudentListFromExcelWithMarks(String fileName) {
+        List<Student> studentList = new ArrayList<>();
+        try {
+            File file = new File(fileName);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+            XSSFSheet xssfSheet = workbook.getSheet("student_result_input");
+
+            Iterator<Row> rowIterator = xssfSheet.iterator();
+
+            rowIterator.next();
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+
+                String studentName = row.getCell(1).getStringCellValue().trim();
+                String schoolName = row.getCell(2).getStringCellValue().trim();
+                int regNo =  Integer.parseInt(row.getCell(3).getStringCellValue());
+                int rollNo = Integer.parseInt(row.getCell(4).getStringCellValue());
+                double marks = row.getCell(5).getNumericCellValue();
+
+                Student student = new Student(studentName, schoolName, rollNo, regNo, marks);
                 studentList.add(student);
 
             }

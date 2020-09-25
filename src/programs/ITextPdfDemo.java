@@ -33,8 +33,8 @@ public class ITextPdfDemo {
 
         document.open();
 
-        Image logoImage = Image.getInstance("src/files/amar_ami.png");
-        Image signImage = Image.getInstance("src/files/gias_signature.png");
+        Image logoImage = Image.getInstance(Constants.AMAR_AMI_LOGO);
+        Image signImage = Image.getInstance(Constants.SIGNATURE_IMAGE);
 
         for (Student student : studentList) {
 
@@ -171,7 +171,7 @@ public class ITextPdfDemo {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
             document.open();
 
-            Image logoImage = Image.getInstance("src/files/amar_ami_white.png");
+            Image logoImage = Image.getInstance(Constants.AMAR_AMI_LOGO_WHITE);
             Font largeFont = new Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.NORMAL, BaseColor.BLACK);
             Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.NORMAL, BaseColor.BLACK);
 

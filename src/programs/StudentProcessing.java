@@ -12,24 +12,20 @@ public class StudentProcessing {
 
 
     public void processEveryThingBeforeExam() {
-        String inputFileName = "src/files/student_input_list.xlsx";
-        String inputSheetName = "class_ten";
-
-        processStudentFromExcelFile(inputFileName, inputSheetName);
+        processStudentFromExcelFile(Constants.CLASS_TEN, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME, Constants.CLASS_TEN_STARING_ROLL_NO
+                , Constants.CLASS_TEN_STARING_REG_NO, Constants.CLASS_TEN_INCREASING_REG_NO, Constants.CLASS_TEN_PDF_FILE_NAME, Constants.CLASS_TEN_EXCEL_FILE_NAME);
 
 
     }
 
-    public void processStudentFromExcelFile(String fileName, String sheetName) {
-        List<Student> studentList = excelReadWriteDemo.createStudentListFromExcel(fileName, sheetName);
+    public void processStudentFromExcelFile(String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName) {
+        List<Student> studentList = excelReadWriteDemo.createStudentListFromExcel(inputFileName, sheetName);
         List<Student> sortedStudentList = getSortStudentList(studentList);
-        createRollAndRegNo(sortedStudentList);
 
-        String outputPdfFileName = "src/admitCards/ClassFive.pdf";
-        String outputExcelFileName = "src/admitCards/class_five_list.xlsx";
-        String outputSheetName = "class_five";
 
-        printFinalStudentList(sortedStudentList, outputPdfFileName, outputExcelFileName, "Five", outputSheetName);
+        createRollAndRegNo(sortedStudentList, rollNo, staringRegNo, increasingRegNo);
+
+        printFinalStudentList(sortedStudentList, outputPdfFileName, outputExcelFileName, className, sheetName);
     }
 
     public List<Student> getSortStudentList(List<Student> studentList) {
@@ -79,14 +75,11 @@ public class StudentProcessing {
         return resultList;
     }
 
-    public void createRollAndRegNo(List<Student> studentList) {
+    public void createRollAndRegNo(List<Student> studentList, int rollNo, int staringRegNo, int increasingRegNo) {
         Map<String, Integer> map = new HashMap<>();
         int schoolCodeSerial = 1;
-        int roleNo = 971221;
-        int staringRegNo = 57;
-        int increasingRegNo = 331;
         for (Student student : studentList) {
-            student.setRoleNo(roleNo);
+            student.setRoleNo(rollNo);
 
             if (map.get(student.getSchoolName()) == null) {
                 map.put(student.getSchoolName(), schoolCodeSerial);
@@ -98,7 +91,7 @@ public class StudentProcessing {
 
             student.setRegNo(regNo);
 
-            roleNo++;
+            rollNo++;
             increasingRegNo++;
         }
     }
@@ -116,7 +109,7 @@ public class StudentProcessing {
     }
 
     public void printResultSheet() {
-        String excelFileName = "src/admitCards/student_excel_list.xlsx";
+        String excelFileName = "src/output_files/student_excel_list.xlsx";
         List<Student> studentList = excelReadWriteDemo.createStudentListFromExcelWithMarks(excelFileName);
         System.out.println("Marks: ");
 
@@ -130,7 +123,7 @@ public class StudentProcessing {
             System.out.println(student.getRoleNo() + " " + student.getMarks());
         }
 
-        String pdfFileName = "src/admitCards/final_result_sheet_five.pdf";
+        String pdfFileName = "src/output_files/final_result_sheet_five.pdf";
         iTextPdfDemo.generateFinalResultSheet(studentList, "FIVE", pdfFileName);
     }
 }

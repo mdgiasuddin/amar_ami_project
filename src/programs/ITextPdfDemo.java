@@ -19,8 +19,8 @@ public class ITextPdfDemo {
         float margin = 25;
         Document document = new Document(pageSize, margin, margin, margin, margin);
 
-        BaseFont scriptMTBold = BaseFont.createFont("src/resources/ScriptMTBold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-        BaseFont oldEnglish = BaseFont.createFont("src/resources/OLDENGL.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont scriptMTBold = BaseFont.createFont(Constants.SCRIPT_MT_BOLD, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont oldEnglish = BaseFont.createFont(Constants.OLD_ENGLISH, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         Font font = new Font(Font.FontFamily.TIMES_ROMAN,10f, Font.ITALIC, BaseColor.BLACK);
 

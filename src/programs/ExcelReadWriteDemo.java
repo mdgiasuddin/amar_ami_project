@@ -51,8 +51,7 @@ public class ExcelReadWriteDemo {
         return allRowList;
     }
 
-    public void generateStudentExcelFile(List<Student> studentList, String fileName, String sheetName) {
-        XSSFWorkbook workbook = new XSSFWorkbook();
+    public void generateStudentExcelFile(XSSFWorkbook workbook, List<Student> studentList, String fileName, String sheetName) {
         XSSFSheet sheet = workbook.createSheet(sheetName + "_student_list");
         List<String[]> allRowList = createExcelRowList(studentList);
         generateExcelFileFromList(workbook, sheet, allRowList, fileName);

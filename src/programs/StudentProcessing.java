@@ -1,6 +1,7 @@
 package programs;
 
 import com.itextpdf.text.DocumentException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.util.*;
@@ -12,20 +13,28 @@ public class StudentProcessing {
 
 
     public void processEveryThingBeforeExam() {
-        processStudentFromExcelFile(Constants.CLASS_TEN, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME, Constants.CLASS_TEN_STARING_ROLL_NO
-                , Constants.CLASS_TEN_STARING_REG_NO, Constants.CLASS_TEN_INCREASING_REG_NO, Constants.CLASS_TEN_PDF_FILE_NAME, Constants.CLASS_TEN_EXCEL_FILE_NAME);
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        processStudentFromExcelFile(workbook, Constants.CLASS_TEN, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME, Constants.CLASS_TEN_STARING_ROLL_NO
+                , Constants.CLASS_TEN_STARING_REG_NO, Constants.CLASS_TEN_INCREASING_REG_NO, Constants.CLASS_TEN_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME);
+
+        processStudentFromExcelFile(workbook, Constants.CLASS_EIGHT, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_EIGHT_EXCEL_SHEET_NAME, Constants.CLASS_EIGHT_STARING_ROLL_NO
+                , Constants.CLASS_EIGHT_STARING_REG_NO, Constants.CLASS_EIGHT_INCREASING_REG_NO, Constants.CLASS_EIGHT_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME);
+
+        processStudentFromExcelFile(workbook, Constants.CLASS_FIVE, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_FIVE_EXCEL_SHEET_NAME, Constants.CLASS_FIVE_STARING_ROLL_NO
+                , Constants.CLASS_FIVE_STARING_REG_NO, Constants.CLASS_FIVE_INCREASING_REG_NO, Constants.CLASS_FIVE_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME);
 
 
     }
 
-    public void processStudentFromExcelFile(String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName) {
+    public void processStudentFromExcelFile(XSSFWorkbook workbook, String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName) {
         List<Student> studentList = excelReadWriteDemo.createStudentListFromExcel(inputFileName, sheetName);
         List<Student> sortedStudentList = getSortStudentList(studentList);
 
 
         createRollAndRegNo(sortedStudentList, rollNo, staringRegNo, increasingRegNo);
 
-        printFinalStudentList(sortedStudentList, outputPdfFileName, outputExcelFileName, className, sheetName);
+        printFinalStudentList(workbook, sortedStudentList, outputPdfFileName, outputExcelFileName, className, sheetName);
     }
 
     public List<Student> getSortStudentList(List<Student> studentList) {
@@ -96,10 +105,10 @@ public class StudentProcessing {
         }
     }
 
-    public void printFinalStudentList(List<Student> studentList, String pdfFileName, String excelFileName, String className, String sheetName) {
+    public void printFinalStudentList(XSSFWorkbook workbook, List<Student> studentList, String pdfFileName, String excelFileName, String className, String sheetName) {
         try {
             iTextPdfDemo.createPdf(studentList, pdfFileName, className);
-            excelReadWriteDemo.generateStudentExcelFile(studentList, excelFileName, sheetName);
+            excelReadWriteDemo.generateStudentExcelFile(workbook, studentList, excelFileName, sheetName);
 
         } catch (IOException e) {
             e.printStackTrace();

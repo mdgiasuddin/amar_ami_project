@@ -5,6 +5,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class StudentProcessing {
     ExcelReadWriteDemo excelReadWriteDemo = new ExcelReadWriteDemo();
@@ -15,23 +17,23 @@ public class StudentProcessing {
         XSSFWorkbook workbook = new XSSFWorkbook();
 
         processStudentFromExcelFile(workbook, Constants.CLASS_TEN, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME, Constants.CLASS_TEN_STARING_ROLL_NO
-                , Constants.CLASS_TEN_STARING_REG_NO, Constants.CLASS_TEN_INCREASING_REG_NO, Constants.CLASS_TEN_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME);
+                , Constants.CLASS_TEN_STARING_REG_NO, Constants.CLASS_TEN_INCREASING_REG_NO, Constants.CLASS_TEN_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_VERIFICATION_NUM);
 
         processStudentFromExcelFile(workbook, Constants.CLASS_EIGHT, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_EIGHT_EXCEL_SHEET_NAME, Constants.CLASS_EIGHT_STARING_ROLL_NO
-                , Constants.CLASS_EIGHT_STARING_REG_NO, Constants.CLASS_EIGHT_INCREASING_REG_NO, Constants.CLASS_EIGHT_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME);
+                , Constants.CLASS_EIGHT_STARING_REG_NO, Constants.CLASS_EIGHT_INCREASING_REG_NO, Constants.CLASS_EIGHT_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_EIGHT_VERIFICATION_NUM);
 
         processStudentFromExcelFile(workbook, Constants.CLASS_FIVE, Constants.INPUT_EXCEL_FILE_NAME, Constants.CLASS_FIVE_EXCEL_SHEET_NAME, Constants.CLASS_FIVE_STARING_ROLL_NO
-                , Constants.CLASS_FIVE_STARING_REG_NO, Constants.CLASS_FIVE_INCREASING_REG_NO, Constants.CLASS_FIVE_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME);
+                , Constants.CLASS_FIVE_STARING_REG_NO, Constants.CLASS_FIVE_INCREASING_REG_NO, Constants.CLASS_FIVE_PDF_FILE_NAME, Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_FIVE_VERIFICATION_NUM);
 
 
     }
 
-    public void processStudentFromExcelFile(XSSFWorkbook workbook, String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName) {
+    public void processStudentFromExcelFile(XSSFWorkbook workbook, String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName, int verificationNumber) {
         List<Student> studentList = excelReadWriteDemo.createStudentListFromExcel(inputFileName, sheetName);
         List<Student> sortedStudentList = getSortStudentList(studentList);
 
 
-        createRollAndRegNo(sortedStudentList, rollNo, staringRegNo, increasingRegNo);
+        createRollAndRegNo(sortedStudentList, rollNo, staringRegNo, increasingRegNo, verificationNumber);
 
         printFinalStudentList(workbook, sortedStudentList, outputPdfFileName, outputExcelFileName, className, sheetName);
     }
@@ -83,10 +85,17 @@ public class StudentProcessing {
         return resultList;
     }
 
-    public void createRollAndRegNo(List<Student> studentList, int rollNo, int staringRegNo, int increasingRegNo) {
+    public void createRollAndRegNo(List<Student> studentList, int rollNo, int staringRegNo, int increasingRegNo, int verificationNumber) {
         Map<String, Integer> map = new HashMap<>();
         int schoolCodeSerial = 1;
+        List<Integer> verificationNumberList = IntStream.range(verificationNumber, verificationNumber+Constants.NUMBER_OF_STUDENT).boxed().collect(Collectors.toList());
+        Collections.shuffle(verificationNumberList);
+
+        int i = 0;
+        Random random = new Random();
+
         for (Student student : studentList) {
+
             student.setRoleNo(rollNo);
 
             if (map.get(student.getSchoolName()) == null) {
@@ -101,6 +110,10 @@ public class StudentProcessing {
 
             rollNo++;
             increasingRegNo++;
+
+            char c = (char) (random.nextInt(26) + 'A');
+            student.setVerificationNo(c + ":" + verificationNumberList.get(i));
+            i++;
         }
     }
 

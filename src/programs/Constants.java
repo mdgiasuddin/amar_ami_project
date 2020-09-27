@@ -28,6 +28,12 @@ public class Constants {
     public static final int CLASS_FIVE_INCREASING_REG_NO = 541;
 
 
+    public static final int CLASS_TEN_VERIFICATION_NUM = 101;
+    public static final int CLASS_EIGHT_VERIFICATION_NUM = 401;
+    public static final int CLASS_FIVE_VERIFICATION_NUM = 701;
+    public static final int NUMBER_OF_STUDENT = 290;
+
+
     public static final String AMAR_AMI_LOGO = "src/resources/amar_ami.png";
     public static final String AMAR_AMI_LOGO_WHITE = "src/resources/amar_ami_white.png";
     public static final String SIGNATURE_IMAGE = "src/resources/gias_signature.png";

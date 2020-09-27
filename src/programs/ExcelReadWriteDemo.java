@@ -32,6 +32,25 @@ public class ExcelReadWriteDemo {
         return allRowList;
     }
 
+    List<String[]> createAttendanceSheetRowList(List<Student> studentList) {
+        List<String[]> allRowList = new ArrayList<>();
+
+        String [] headerRow = new String[] {"Sl.", "Roll No", "Registration No", "Verification No"};
+
+        allRowList.add(headerRow);
+
+        int i = 1;
+        for (Student student : studentList) {
+            String [] otherRow = new String[] {i+".", student.getName(), String.valueOf(student.getRoleNo())
+                    , String.valueOf(student.getRegNo()), student.getVerificationNo()};
+
+            allRowList.add(otherRow);
+            i++;
+        }
+
+        return allRowList;
+    }
+
     List<String[]> createExcelRowListForResultSheet(List<Student> studentList) {
         List<String[]> allRowList = new ArrayList<>();
 
@@ -55,6 +74,10 @@ public class ExcelReadWriteDemo {
         XSSFSheet sheet = workbook.createSheet(sheetName + "_student_list");
         List<String[]> allRowList = createExcelRowList(studentList);
         generateExcelFileFromList(workbook, sheet, allRowList, fileName);
+
+        XSSFSheet sheetAttendance = workbook.createSheet(sheetName + "_attendance_sheet");
+        allRowList = createAttendanceSheetRowList(studentList);
+        generateExcelFileFromList(workbook, sheetAttendance, allRowList, fileName);
 
         XSSFSheet sheetResult = workbook.createSheet(sheetName + "_result_input");
         allRowList = createExcelRowListForResultSheet(studentList);

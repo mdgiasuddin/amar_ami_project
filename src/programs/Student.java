@@ -14,6 +14,8 @@ public class Student {
 
     private double marks;
 
+    private String verificationNo;
+
     public Student(String name, String schoolName, int schoolRoleNo) {
         this.name = name;
         this.schoolName = schoolName;
@@ -28,16 +30,11 @@ public class Student {
         this.marks = marks;
     }
 
-    public void setName(String name) {
+    public Student(String name, int roleNo, int regNo, String verificationNo) {
         this.name = name;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    public void setSchoolRoleNo(int schoolRoleNo) {
-        this.schoolRoleNo = schoolRoleNo;
+        this.roleNo = roleNo;
+        this.regNo = regNo;
+        this.verificationNo = verificationNo;
     }
 
     public void setRoleNo(int roleNo) {
@@ -48,9 +45,7 @@ public class Student {
         this.regNo = regNo;
     }
 
-    public void setMarks(double marks) {
-        this.marks = marks;
-    }
+    public void setVerificationNo(String verificationNo) { this.verificationNo = verificationNo; }
 
     public String getName() {
         return name;
@@ -74,5 +69,9 @@ public class Student {
 
     public double getMarks() {
         return marks;
+    }
+
+    public String getVerificationNo() {
+        return verificationNo;
     }
 }

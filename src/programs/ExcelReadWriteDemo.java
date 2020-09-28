@@ -35,7 +35,7 @@ public class ExcelReadWriteDemo {
     List<String[]> createAttendanceSheetRowList(List<Student> studentList) {
         List<String[]> allRowList = new ArrayList<>();
 
-        String [] headerRow = new String[] {"Sl.", "Roll No", "Registration No", "Verification No"};
+        String [] headerRow = new String[] {"Sl.", "Name", "Roll No", "Registration No", "Verification No"};
 
         allRowList.add(headerRow);
 
@@ -71,15 +71,15 @@ public class ExcelReadWriteDemo {
     }
 
     public void generateStudentExcelFile(XSSFWorkbook workbook, List<Student> studentList, String fileName, String sheetName) {
-        XSSFSheet sheet = workbook.createSheet(sheetName + "_student_list");
+        XSSFSheet sheet = workbook.createSheet(sheetName + Constants.STUDENT_LIST);
         List<String[]> allRowList = createExcelRowList(studentList);
         generateExcelFileFromList(workbook, sheet, allRowList, fileName);
 
-        XSSFSheet sheetAttendance = workbook.createSheet(sheetName + "_attendance_sheet");
+        XSSFSheet sheetAttendance = workbook.createSheet(sheetName + Constants.ATTENDANCE_SHEET);
         allRowList = createAttendanceSheetRowList(studentList);
         generateExcelFileFromList(workbook, sheetAttendance, allRowList, fileName);
 
-        XSSFSheet sheetResult = workbook.createSheet(sheetName + "_result_input");
+        XSSFSheet sheetResult = workbook.createSheet(sheetName + Constants.RESULT_INPUT);
         allRowList = createExcelRowListForResultSheet(studentList);
         generateExcelFileFromList(workbook, sheetResult, allRowList, fileName);
     }
@@ -144,6 +144,40 @@ public class ExcelReadWriteDemo {
         return studentList;
     }
 
+    public List<Student> createAttendanceSheetStudentListFromExcel(String fileName, String sheetName) {
+        List<Student> studentList = new ArrayList<>();
+        try {
+            File file = new File(fileName);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+            XSSFSheet xssfSheet = workbook.getSheet(sheetName);
+
+            Iterator<Row> rowIterator = xssfSheet.iterator();
+
+            rowIterator.next();
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+
+                String studentName = row.getCell(1).getStringCellValue().trim();
+                int rollNo = Integer.parseInt(row.getCell(2).getStringCellValue().trim());
+                int regNo =  Integer.parseInt(row.getCell(3).getStringCellValue().trim());
+                String verificationNo = row.getCell(4).getStringCellValue().trim();
+
+
+                Student student = new Student(studentName, rollNo, regNo, verificationNo);
+                studentList.add(student);
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
+
     public List<Student> createStudentListFromExcelWithMarks(String fileName) {
         List<Student> studentList = new ArrayList<>();
         try {
@@ -177,4 +211,5 @@ public class ExcelReadWriteDemo {
 
         return studentList;
     }
+
 }

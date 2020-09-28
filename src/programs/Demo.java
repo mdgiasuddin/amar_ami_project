@@ -6,6 +6,8 @@ public class Demo {
 
         StudentProcessing studentProcessing = new StudentProcessing();
 
-        studentProcessing.processEveryThingBeforeExam();
+        //studentProcessing.processEveryThingBeforeExam();
+
+        studentProcessing.generateAttendanceSheetAllClass();
     }
 }

@@ -28,6 +28,15 @@ public class StudentProcessing {
 
     }
 
+    public void generateAttendanceSheetAllClass() {
+        int [] distributionList = new int[] {5, 6, 3};
+        String [] roomNumberList = new String[] {"Room : 109", "Room : 110", "Room : 111"};
+
+        generateStudentAttendanceSheet(Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME+Constants.ATTENDANCE_SHEET, distributionList, roomNumberList);
+
+
+    }
+
     public void processStudentFromExcelFile(XSSFWorkbook workbook, String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName, int verificationNumber) {
         List<Student> studentList = excelReadWriteDemo.createStudentListFromExcel(inputFileName, sheetName);
         List<Student> sortedStudentList = getSortStudentList(studentList);
@@ -146,5 +155,25 @@ public class StudentProcessing {
 
         String pdfFileName = "src/output_files/final_result_sheet_five.pdf";
         iTextPdfDemo.generateFinalResultSheet(studentList, "FIVE", pdfFileName);
+    }
+
+
+    public void generateStudentAttendanceSheet(String fileName, String sheetName, int [] distributionList, String [] roomNumberList) {
+       List<Student> studentList  = excelReadWriteDemo.createAttendanceSheetStudentListFromExcel(fileName, sheetName);
+
+       int studentCovered = 0;
+       for (int i=0; i<distributionList.length; i++) {
+           int numberOfStudent = distributionList[i];
+           String roomNumber = roomNumberList[i];
+
+           System.out.println(roomNumber);
+           for (int j=0; j<numberOfStudent; j++) {
+               Student student = studentList.get(studentCovered+j);
+               System.out.println(student.getName() + " " + student.getRoleNo() + " " + student.getRegNo() + " " + student.getVerificationNo());
+           }
+
+           studentCovered += numberOfStudent;
+
+       }
     }
 }

@@ -12,6 +12,7 @@ public class Constants {
     public static final String CLASS_TEN_EXCEL_SHEET_NAME = "class_ten";
     public static final String CLASS_TEN_PDF_FILE_NAME = INPUT_OUTPUT_FILE_DIRECTORY + "ClassTenAdmitCards.pdf";
     public static final String CLASS_TEN_ATTENDANCE_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassTenAttendanceSheet.pdf";
+    public static final String CLASS_TEN_RESULT_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassTenResultSheet.pdf";
     public static final int CLASS_TEN_STARING_ROLL_NO = 971221;
     public static final int CLASS_TEN_STARING_REG_NO = 57;
     public static final int CLASS_TEN_INCREASING_REG_NO = 331;
@@ -19,6 +20,8 @@ public class Constants {
     public static final String CLASS_EIGHT = "Eight";
     public static final String CLASS_EIGHT_EXCEL_SHEET_NAME = "class_eight";
     public static final String CLASS_EIGHT_PDF_FILE_NAME = INPUT_OUTPUT_FILE_DIRECTORY + "ClassEightAdmitCards.pdf";
+    public static final String CLASS_EIGHT_ATTENDANCE_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassEightAttendanceSheet.pdf";
+    public static final String CLASS_EIGHT_RESULT_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassEightResultSheet.pdf";
     public static final int CLASS_EIGHT_STARING_ROLL_NO = 651411;
     public static final int CLASS_EIGHT_STARING_REG_NO = 37;
     public static final int CLASS_EIGHT_INCREASING_REG_NO = 271;
@@ -26,6 +29,8 @@ public class Constants {
     public static final String CLASS_FIVE = "Five";
     public static final String CLASS_FIVE_EXCEL_SHEET_NAME = "class_five";
     public static final String CLASS_FIVE_PDF_FILE_NAME = INPUT_OUTPUT_FILE_DIRECTORY + "ClassFiveAdmitCards.pdf";
+    public static final String CLASS_FIVE_ATTENDANCE_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassFiveAttendanceSheet.pdf";
+    public static final String CLASS_FIVE_RESULT_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassFiveResultSheet.pdf";
     public static final int CLASS_FIVE_STARING_ROLL_NO = 831341;
     public static final int CLASS_FIVE_STARING_REG_NO = 23;
     public static final int CLASS_FIVE_INCREASING_REG_NO = 541;
@@ -42,5 +47,5 @@ public class Constants {
     public static final String SIGNATURE_IMAGE = "src/resources/gias_signature.png";
 
     public static final String SCRIPT_MT_BOLD = "src/resources/ScriptMTBold.ttf";
-    public static final String OLD_ENGLISH = "src/resources/ScriptMTBold.ttf";
+    public static final String OLD_ENGLISH = "src/resources/OLDENGL.TTF";
 }

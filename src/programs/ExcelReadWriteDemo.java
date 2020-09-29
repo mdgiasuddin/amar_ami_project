@@ -72,7 +72,7 @@ public class ExcelReadWriteDemo {
 
     }
 
-    public List<Student> createStudentListFromExcel(String fileName, String sheetName) {
+    public List<Student> createStudentListFromInputExcelFile(String fileName, String sheetName) {
         List<Student> studentList = new ArrayList<>();
         try {
             File file = new File(fileName);
@@ -104,7 +104,7 @@ public class ExcelReadWriteDemo {
         return studentList;
     }
 
-    public List<Student> createAttendanceSheetStudentListFromExcel(String fileName, String sheetName) {
+    public List<Student> createStudentListFromFormattedExcelFile(String fileName, String sheetName) {
         List<Student> studentList = new ArrayList<>();
         try {
             File file = new File(fileName);
@@ -120,12 +120,15 @@ public class ExcelReadWriteDemo {
                 Row row = rowIterator.next();
 
                 String studentName = row.getCell(1).getStringCellValue().trim();
+                String schoolName = row.getCell(2).getStringCellValue().trim();
+                int schoolRollNo = (int) row.getCell(3).getNumericCellValue();
                 int rollNo = (int) row.getCell(6).getNumericCellValue();
                 int regNo = (int) row.getCell(5).getNumericCellValue();
                 String verificationNo = row.getCell(4).getStringCellValue().trim();
+                double marks = row.getCell(7).getNumericCellValue();
 
 
-                Student student = new Student(studentName, rollNo, regNo, verificationNo);
+                Student student = new Student(studentName, schoolName, schoolRollNo, rollNo, regNo, marks, verificationNo);
                 studentList.add(student);
 
             }
@@ -138,38 +141,5 @@ public class ExcelReadWriteDemo {
         return studentList;
     }
 
-    public List<Student> createStudentListFromExcelWithMarks(String fileName) {
-        List<Student> studentList = new ArrayList<>();
-        try {
-            File file = new File(fileName);
-            FileInputStream fileInputStream = new FileInputStream(file);
-
-            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-            XSSFSheet xssfSheet = workbook.getSheet("student_result_input");
-
-            Iterator<Row> rowIterator = xssfSheet.iterator();
-
-            rowIterator.next();
-            while (rowIterator.hasNext()) {
-                Row row = rowIterator.next();
-
-                String studentName = row.getCell(1).getStringCellValue().trim();
-                String schoolName = row.getCell(2).getStringCellValue().trim();
-                int regNo =  Integer.parseInt(row.getCell(3).getStringCellValue());
-                int rollNo = Integer.parseInt(row.getCell(4).getStringCellValue());
-                double marks = row.getCell(5).getNumericCellValue();
-
-                Student student = new Student(studentName, schoolName, rollNo, regNo, marks);
-                studentList.add(student);
-
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return studentList;
-    }
 
 }

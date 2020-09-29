@@ -22,18 +22,13 @@ public class Student {
         this.schoolRoleNo = schoolRoleNo;
     }
 
-    public Student(String name, String schoolName, int roleNo, int regNo, double marks) {
+    public Student(String name, String schoolName, int schoolRoleNo, int roleNo, int regNo, double marks, String verificationNo) {
         this.name = name;
         this.schoolName = schoolName;
+        this.schoolRoleNo = schoolRoleNo;
         this.roleNo = roleNo;
         this.regNo = regNo;
         this.marks = marks;
-    }
-
-    public Student(String name, int roleNo, int regNo, String verificationNo) {
-        this.name = name;
-        this.roleNo = roleNo;
-        this.regNo = regNo;
         this.verificationNo = verificationNo;
     }
 

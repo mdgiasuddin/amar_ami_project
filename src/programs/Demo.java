@@ -8,9 +8,11 @@ public class Demo {
 
         //studentProcessing.processEveryThingBeforeExam();
 
-        studentProcessing.generateAttendanceSheetAllClass();
+        //studentProcessing.generateAttendanceSheetAllClass();
 
         //System.out.println((int) Double.parseDouble("123"));
+
+        studentProcessing.printResultSheet();
 
         //System.out.println(NumberStringUtils.isNumeric("0"));
     }

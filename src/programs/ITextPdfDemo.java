@@ -253,4 +253,116 @@ public class ITextPdfDemo {
         }
     }
 
+    public void generateAttendanceSheet(List<Student> studentList, String className, int[] distributionList, String[] roomNumberList, String filename) {
+        float margin = 25;
+        Document document = new Document(PageSize.A4, margin, margin, margin, margin);
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+            document.open();
+
+            Image logoImage = Image.getInstance(Constants.AMAR_AMI_LOGO_WHITE);
+            Font largeFont = new Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.NORMAL, BaseColor.BLACK);
+            Font mediumFont = new Font(Font.FontFamily.TIMES_ROMAN, 15f, Font.NORMAL, BaseColor.BLACK);
+            Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.NORMAL, BaseColor.BLACK);
+
+
+            logoImage.setAlignment(Element.ALIGN_LEFT);
+            logoImage.setBorderWidth(18);
+
+
+
+
+            int studentCovered = 0;
+            for (int i=0; i<distributionList.length; i++) {
+                int numberOfStudent = distributionList[i];
+                String roomNumber = roomNumberList[i];
+
+
+                PdfPTable imageTable = new PdfPTable(2);
+                imageTable.setWidthPercentage(100);
+                imageTable.setWidths(new int[]{1, 4});
+
+                PdfPCell imageCell = new PdfPCell();
+                imageCell.addElement(logoImage);
+                imageCell.setBorder(PdfPCell.NO_BORDER);
+                imageTable.addCell(imageCell);
+
+                PdfPCell textCell = new PdfPCell();
+                Paragraph paragraph = new Paragraph("Amar Ami\n", largeFont);
+                paragraph.add(new Chunk("Talent Evaluation Exam - 2020\n", largeFont));
+                paragraph.add(new Chunk("Attendance Sheet (Class : " + className + ", " + roomNumber + ")", mediumFont));
+                paragraph.setAlignment(Element.ALIGN_CENTER);
+                textCell.addElement(paragraph);
+                textCell.setBorder(Rectangle.NO_BORDER);
+
+
+                imageTable.addCell(textCell);
+                imageTable.setSpacingAfter(20);
+
+                PdfPTable table = new PdfPTable(6);
+                table.setWidthPercentage(100);
+                table.setWidths(new int[] {2, 16, 4, 5, 5, 8});
+
+                PdfPCell cell;
+
+                cell = new PdfPCell(new Phrase("Sl.", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Name", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Roll No.", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Registration No", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Verification No", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Signature", normalFont));
+                table.addCell(cell);
+
+                System.out.println(roomNumber);
+                for (int j=0; j<numberOfStudent; j++) {
+                    Student student = studentList.get(studentCovered+j);
+
+                    cell = new PdfPCell(new Phrase((j+1) + ".", normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(student.getName(), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(String.valueOf(student.getRoleNo()), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(String.valueOf(student.getRegNo()), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(student.getVerificationNo(), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase("", normalFont));
+                    table.addCell(cell);
+
+                }
+
+                studentCovered += numberOfStudent;
+
+                document.add(imageTable);
+                document.add(table);
+                document.newPage();
+
+            }
+
+
+
+            document.close();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

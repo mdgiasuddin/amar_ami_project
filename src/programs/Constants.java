@@ -7,12 +7,11 @@ public class Constants {
     public static final String OUTPUT_EXCEL_FILE_NAME = INPUT_OUTPUT_FILE_DIRECTORY + "student_output_list.xlsx";
 
     public static final String STUDENT_LIST = "_student_list";
-    public static final String ATTENDANCE_SHEET = "_attendance_sheet";
-    public static final String RESULT_INPUT = "_result_input";
 
     public static final String CLASS_TEN = "Ten";
     public static final String CLASS_TEN_EXCEL_SHEET_NAME = "class_ten";
     public static final String CLASS_TEN_PDF_FILE_NAME = INPUT_OUTPUT_FILE_DIRECTORY + "ClassTenAdmitCards.pdf";
+    public static final String CLASS_TEN_ATTENDANCE_SHEET = INPUT_OUTPUT_FILE_DIRECTORY + "ClassTenAttendanceSheet.pdf";
     public static final int CLASS_TEN_STARING_ROLL_NO = 971221;
     public static final int CLASS_TEN_STARING_REG_NO = 57;
     public static final int CLASS_TEN_INCREASING_REG_NO = 331;

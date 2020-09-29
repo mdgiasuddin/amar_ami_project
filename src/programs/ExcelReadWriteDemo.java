@@ -16,14 +16,14 @@ public class ExcelReadWriteDemo {
     List<String[]> createExcelRowList(List<Student> studentList) {
         List<String[]> allRowList = new ArrayList<>();
 
-        String [] headerRow = new String[] {"Sl.", "Name", "School Name", "School Roll No.", "Roll No", "Registration No"};
+        String [] headerRow = new String[] {"Sl.", "Name", "School Name", "School Roll No.", "Verification No", "Registration No", "Roll No", "Marks"};
 
         allRowList.add(headerRow);
 
         int i = 1;
         for (Student student : studentList) {
             String [] otherRow = new String[] {i+".", student.getName(), student.getSchoolName(), String.valueOf(student.getSchoolRoleNo())
-                    , String.valueOf(student.getRoleNo()), String.valueOf(student.getRegNo())};
+                    , student.getVerificationNo(), String.valueOf(student.getRegNo()), String.valueOf(student.getRoleNo()), "0"};
 
             allRowList.add(otherRow);
             i++;
@@ -32,56 +32,12 @@ public class ExcelReadWriteDemo {
         return allRowList;
     }
 
-    List<String[]> createAttendanceSheetRowList(List<Student> studentList) {
-        List<String[]> allRowList = new ArrayList<>();
-
-        String [] headerRow = new String[] {"Sl.", "Name", "Roll No", "Registration No", "Verification No"};
-
-        allRowList.add(headerRow);
-
-        int i = 1;
-        for (Student student : studentList) {
-            String [] otherRow = new String[] {i+".", student.getName(), String.valueOf(student.getRoleNo())
-                    , String.valueOf(student.getRegNo()), student.getVerificationNo()};
-
-            allRowList.add(otherRow);
-            i++;
-        }
-
-        return allRowList;
-    }
-
-    List<String[]> createExcelRowListForResultSheet(List<Student> studentList) {
-        List<String[]> allRowList = new ArrayList<>();
-
-        String [] headerRow = new String[] {"Sl.", "Name", "School Name", "Registration No", "Roll No", "Marks"};
-
-        allRowList.add(headerRow);
-
-        int i = 1;
-        for (Student student : studentList) {
-            String [] otherRow = new String[] {i+".", student.getName(), student.getSchoolName(), String.valueOf(student.getRegNo())
-                    , String.valueOf(student.getRoleNo()), ""};
-
-            allRowList.add(otherRow);
-            i++;
-        }
-
-        return allRowList;
-    }
 
     public void generateStudentExcelFile(XSSFWorkbook workbook, List<Student> studentList, String fileName, String sheetName) {
         XSSFSheet sheet = workbook.createSheet(sheetName + Constants.STUDENT_LIST);
         List<String[]> allRowList = createExcelRowList(studentList);
         generateExcelFileFromList(workbook, sheet, allRowList, fileName);
 
-        XSSFSheet sheetAttendance = workbook.createSheet(sheetName + Constants.ATTENDANCE_SHEET);
-        allRowList = createAttendanceSheetRowList(studentList);
-        generateExcelFileFromList(workbook, sheetAttendance, allRowList, fileName);
-
-        XSSFSheet sheetResult = workbook.createSheet(sheetName + Constants.RESULT_INPUT);
-        allRowList = createExcelRowListForResultSheet(studentList);
-        generateExcelFileFromList(workbook, sheetResult, allRowList, fileName);
     }
 
     public void generateExcelFileFromList( XSSFWorkbook workbook, XSSFSheet sheet, List<String[]> allRowList, String fileName){
@@ -93,7 +49,11 @@ public class ExcelReadWriteDemo {
             j = 0;
             for (String column : rowList) {
                 XSSFCell cell = row.createCell(j);
-                cell.setCellValue(column);
+
+                if (NumberStringUtils.isNumeric(column))
+                    cell.setCellValue(Double.parseDouble(column));
+                else
+                    cell.setCellValue(column);
                 j++;
             }
             i++;
@@ -160,8 +120,8 @@ public class ExcelReadWriteDemo {
                 Row row = rowIterator.next();
 
                 String studentName = row.getCell(1).getStringCellValue().trim();
-                int rollNo = Integer.parseInt(row.getCell(2).getStringCellValue().trim());
-                int regNo =  Integer.parseInt(row.getCell(3).getStringCellValue().trim());
+                int rollNo = (int) row.getCell(6).getNumericCellValue();
+                int regNo = (int) row.getCell(5).getNumericCellValue();
                 String verificationNo = row.getCell(4).getStringCellValue().trim();
 
 

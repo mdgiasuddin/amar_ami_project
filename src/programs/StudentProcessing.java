@@ -30,9 +30,9 @@ public class StudentProcessing {
 
     public void generateAttendanceSheetAllClass() {
         int [] distributionList = new int[] {5, 6, 3};
-        String [] roomNumberList = new String[] {"Room : 109", "Room : 110", "Room : 111"};
+        String [] roomNumberList = new String[] {"Room No : 109", "Room No : 110", "Room No : 111"};
 
-        generateStudentAttendanceSheet(Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME+Constants.ATTENDANCE_SHEET, distributionList, roomNumberList);
+        generateStudentAttendanceSheet(Constants.CLASS_TEN, Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_TEN_EXCEL_SHEET_NAME+Constants.STUDENT_LIST, distributionList, roomNumberList, Constants.CLASS_TEN_ATTENDANCE_SHEET);
 
 
     }
@@ -121,7 +121,7 @@ public class StudentProcessing {
             increasingRegNo++;
 
             char c = (char) (random.nextInt(26) + 'A');
-            student.setVerificationNo(c + ":" + verificationNumberList.get(i));
+            student.setVerificationNo(c + ": " + verificationNumberList.get(i));
             i++;
         }
     }
@@ -158,22 +158,10 @@ public class StudentProcessing {
     }
 
 
-    public void generateStudentAttendanceSheet(String fileName, String sheetName, int [] distributionList, String [] roomNumberList) {
-       List<Student> studentList  = excelReadWriteDemo.createAttendanceSheetStudentListFromExcel(fileName, sheetName);
+    public void generateStudentAttendanceSheet(String className, String excelFileName, String sheetName, int [] distributionList, String [] roomNumberList, String pdfFileName) {
+       List<Student> studentList  = excelReadWriteDemo.createAttendanceSheetStudentListFromExcel(excelFileName, sheetName);
 
-       int studentCovered = 0;
-       for (int i=0; i<distributionList.length; i++) {
-           int numberOfStudent = distributionList[i];
-           String roomNumber = roomNumberList[i];
+       iTextPdfDemo.generateAttendanceSheet(studentList, className, distributionList, roomNumberList, pdfFileName);
 
-           System.out.println(roomNumber);
-           for (int j=0; j<numberOfStudent; j++) {
-               Student student = studentList.get(studentCovered+j);
-               System.out.println(student.getName() + " " + student.getRoleNo() + " " + student.getRegNo() + " " + student.getVerificationNo());
-           }
-
-           studentCovered += numberOfStudent;
-
-       }
     }
 }

@@ -41,6 +41,7 @@ public class Constants {
     public static final int CLASS_FIVE_VERIFICATION_NUM = 701;
     public static final int NUMBER_OF_STUDENT = 290;
 
+    public static final String PRIZE_GIVING_PDF_FILE = INPUT_OUTPUT_FILE_DIRECTORY + "PrizeGivingList.pdf";
 
     public static final String AMAR_AMI_LOGO = "src/resources/amar_ami.png";
     public static final String AMAR_AMI_LOGO_WHITE = "src/resources/amar_ami_white.png";

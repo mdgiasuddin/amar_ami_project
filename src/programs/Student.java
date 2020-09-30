@@ -6,6 +6,8 @@ public class Student {
 
     private String schoolName;
 
+    private String className;
+
     private int schoolRoleNo;
 
     private int roleNo;
@@ -16,16 +18,18 @@ public class Student {
 
     private String verificationNo;
 
-    public Student(String name, String schoolName, int schoolRoleNo) {
+    public Student(String name, String schoolName, String className, int schoolRoleNo) {
         this.name = name;
         this.schoolName = schoolName;
+        this.className = className;
         this.schoolRoleNo = schoolRoleNo;
     }
 
-    public Student(String name, String schoolName, int schoolRoleNo, int roleNo, int regNo, double marks, String verificationNo) {
+    public Student(String name, String schoolName, String className, int schoolRoleNo, int roleNo, int regNo, double marks, String verificationNo) {
         this.name = name;
         this.schoolName = schoolName;
         this.schoolRoleNo = schoolRoleNo;
+        this.className = className;
         this.roleNo = roleNo;
         this.regNo = regNo;
         this.marks = marks;
@@ -50,6 +54,8 @@ public class Student {
         return schoolName;
     }
 
+    public String getClassName() { return className; }
+
     public int getSchoolRoleNo() {
         return schoolRoleNo;
     }
@@ -68,5 +74,20 @@ public class Student {
 
     public String getVerificationNo() {
         return verificationNo;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", schoolName='" + schoolName + '\'' +
+                ", className='" + className + '\'' +
+                ", schoolRoleNo=" + schoolRoleNo +
+                ", roleNo=" + roleNo +
+                ", regNo=" + regNo +
+                ", marks=" + marks +
+                ", verificationNo='" + verificationNo + '\'' +
+                '}';
     }
 }

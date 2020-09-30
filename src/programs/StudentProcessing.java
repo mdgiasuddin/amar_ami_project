@@ -44,11 +44,10 @@ public class StudentProcessing {
         roomNumberList = new String[] {"Room No : 219", "Room No : 215", "Room No : 123"};
         generateStudentAttendanceSheet(Constants.CLASS_FIVE, Constants.OUTPUT_EXCEL_FILE_NAME, Constants.CLASS_FIVE_EXCEL_SHEET_NAME+Constants.STUDENT_LIST, distributionList, roomNumberList, Constants.CLASS_FIVE_ATTENDANCE_SHEET);
 
-
     }
 
     public void processStudentFromExcelFile(XSSFWorkbook workbook, String className, String inputFileName, String sheetName, int rollNo, int staringRegNo, int increasingRegNo, String outputPdfFileName, String outputExcelFileName, int verificationNumber) {
-        List<Student> studentList = excelReadWriteDemo.createStudentListFromInputExcelFile(inputFileName, sheetName);
+        List<Student> studentList = excelReadWriteDemo.createStudentListFromInputExcelFile(inputFileName, sheetName, className);
         List<Student> sortedStudentList = getSortStudentList(studentList);
 
 
@@ -138,7 +137,7 @@ public class StudentProcessing {
 
     public void printFinalStudentList(XSSFWorkbook workbook, List<Student> studentList, String pdfFileName, String excelFileName, String className, String sheetName) {
         try {
-            iTextPdfDemo.createPdf(studentList, pdfFileName, className);
+            iTextPdfDemo.generateAdmitCard(studentList, pdfFileName);
             excelReadWriteDemo.generateStudentExcelFile(workbook, studentList, excelFileName, sheetName);
 
         } catch (IOException e) {
@@ -216,30 +215,23 @@ public class StudentProcessing {
         }
 
 
+        List<Student> prizeGivingStudentList = new ArrayList<>();
+        prizeGivingStudentList.addAll(classTenMeritList);
+        prizeGivingStudentList.addAll(classEightMeritList);
+        prizeGivingStudentList.addAll(classFiveMeritList);
 
-        for (Student student : classTenMeritList)
-            System.out.println(student.getName() + " " + student.getRoleNo() + " " + student.getSchoolName() + " " + student.getMarks());
+        prizeGivingStudentList.addAll(classTenSchoolWiseList);
+        prizeGivingStudentList.addAll(classEightSchoolWiseList);
+        prizeGivingStudentList.addAll(classFiveSchoolWiseList);
 
-        System.out.println("\n\n\n\n");
+        int [] studentNumberList = new int[] {classTenMeritList.size(), classEightMeritList.size(), classFiveMeritList.size()
+                , classTenSchoolWiseList.size(), classEightSchoolWiseList.size(), classFiveSchoolWiseList.size()};
 
-        for (Student student : classTenSchoolWiseList)
-            System.out.println(student.getName() + " " + student.getRoleNo() + " " + student.getSchoolName() + " " + student.getMarks());
+        String [] category = new String[] {"Class 10 Merit List", "Class 8 Merit List", "Class 5 Merit List", "Class 10 School-Wise List"
+                , "Class 8 School-Wise List", "Class 5 School-Wise List"};
 
-        System.out.println("\n\n\n\n");
-        for (Student student : classEightMeritList)
-            System.out.println(student.getName() + " " + student.getRoleNo() + " " + student.getSchoolName() + " " + student.getMarks());
+        iTextPdfDemo.generatePrizeGivingPdfFile(prizeGivingStudentList, studentNumberList, category, Constants.PRIZE_GIVING_PDF_FILE);
 
-        System.out.println("\n\n\n\n");
-        for (Student student : classEightSchoolWiseList)
-            System.out.println(student.getName() + " " + student.getRoleNo() + " " + student.getSchoolName() + " " + student.getMarks());
-
-        System.out.println("\n\n\n\n");
-        for (Student student : classFiveMeritList)
-            System.out.println(student.getName() + " " + student.getRoleNo()+ " " + student.getSchoolName() + " " + student.getMarks());
-
-        System.out.println("\n\n\n\n");
-        for (Student student : classFiveSchoolWiseList)
-            System.out.println(student.getName() + " " + student.getRoleNo()+ " " + student.getSchoolName() + " " + student.getMarks());
     }
 
 

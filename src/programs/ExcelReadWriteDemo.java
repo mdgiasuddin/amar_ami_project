@@ -10,20 +10,22 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class ExcelReadWriteDemo {
 
     List<String[]> createExcelRowList(List<Student> studentList) {
         List<String[]> allRowList = new ArrayList<>();
 
-        String [] headerRow = new String[] {"Sl.", "Name", "School Name", "School Roll No.", "Verification No", "Registration No", "Roll No", "Marks"};
+        String [] headerRow = new String[] {"Sl.", "Name", "School Name", "Class", "School Roll No.", "Verification No", "Registration No", "Roll No", "Marks"};
 
         allRowList.add(headerRow);
 
         int i = 1;
         for (Student student : studentList) {
-            String [] otherRow = new String[] {i+".", student.getName(), student.getSchoolName(), String.valueOf(student.getSchoolRoleNo())
-                    , student.getVerificationNo(), String.valueOf(student.getRegNo()), String.valueOf(student.getRoleNo()), "0"};
+            String mark = String.valueOf(40 + new Random().nextInt(140));
+            String [] otherRow = new String[] {i+".", student.getName(), student.getSchoolName(), student.getClassName(), String.valueOf(student.getSchoolRoleNo())
+                    , student.getVerificationNo(), String.valueOf(student.getRegNo()), String.valueOf(student.getRoleNo()), mark};
 
             allRowList.add(otherRow);
             i++;
@@ -72,7 +74,7 @@ public class ExcelReadWriteDemo {
 
     }
 
-    public List<Student> createStudentListFromInputExcelFile(String fileName, String sheetName) {
+    public List<Student> createStudentListFromInputExcelFile(String fileName, String sheetName, String className) {
         List<Student> studentList = new ArrayList<>();
         try {
             File file = new File(fileName);
@@ -91,7 +93,7 @@ public class ExcelReadWriteDemo {
                 String schoolName = row.getCell(1).getStringCellValue().trim();
                 int schoolRollNo = (int) row.getCell(2).getNumericCellValue();
 
-                Student student = new Student(studentName, schoolName, schoolRollNo);
+                Student student = new Student(studentName, schoolName, className, schoolRollNo);
                 studentList.add(student);
 
             }
@@ -121,14 +123,14 @@ public class ExcelReadWriteDemo {
 
                 String studentName = row.getCell(1).getStringCellValue().trim();
                 String schoolName = row.getCell(2).getStringCellValue().trim();
-                int schoolRollNo = (int) row.getCell(3).getNumericCellValue();
-                int rollNo = (int) row.getCell(6).getNumericCellValue();
-                int regNo = (int) row.getCell(5).getNumericCellValue();
-                String verificationNo = row.getCell(4).getStringCellValue().trim();
-                double marks = row.getCell(7).getNumericCellValue();
+                String className = row.getCell(3).getStringCellValue().trim();
+                int schoolRollNo = (int) row.getCell(4).getNumericCellValue();
+                String verificationNo = row.getCell(5).getStringCellValue().trim();
+                int regNo = (int) row.getCell(6).getNumericCellValue();
+                int rollNo = (int) row.getCell(7).getNumericCellValue();
+                double marks = row.getCell(8).getNumericCellValue();
 
-
-                Student student = new Student(studentName, schoolName, schoolRollNo, rollNo, regNo, marks, verificationNo);
+                Student student = new Student(studentName, schoolName, className, schoolRollNo, rollNo, regNo, marks, verificationNo);
                 studentList.add(student);
 
             }

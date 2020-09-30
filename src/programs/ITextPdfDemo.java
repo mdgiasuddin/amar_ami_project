@@ -10,9 +10,10 @@ import java.util.List;
 
 public class ITextPdfDemo {
 
+    private final int SPACING = 20;
 
 
-    public void createPdf(List<Student> studentList, String filename, String className) throws IOException, DocumentException {
+    public void generateAdmitCard(List<Student> studentList, String filename) throws IOException, DocumentException {
 
         Rectangle pageSize = new Rectangle(594, 423);
         pageSize.setBackgroundColor(new BaseColor(230, 230, 250));
@@ -39,7 +40,7 @@ public class ITextPdfDemo {
         for (Student student : studentList) {
 
             logoImage.setAlignment(Element.ALIGN_LEFT);
-            logoImage.setBorderWidth(20);
+            logoImage.setBorderWidth(SPACING);
 
 
             PdfPTable imageTable = new PdfPTable(2);
@@ -91,7 +92,7 @@ public class ITextPdfDemo {
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase("Class: " + className, scriptMTBold11));
+            cell = new PdfPCell(new Phrase("Class: " + student.getClassName(), scriptMTBold11));
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
 
@@ -199,7 +200,7 @@ public class ITextPdfDemo {
 
 
             imageTable.addCell(textCell);
-            imageTable.setSpacingAfter(20);
+            imageTable.setSpacingAfter(SPACING);
 
 
             PdfPTable table = new PdfPTable(5);
@@ -253,6 +254,110 @@ public class ITextPdfDemo {
         }
     }
 
+
+    public void generatePrizeGivingPdfFile(List<Student> studentList, int[] studentNumberList, String[] category, String filename) {
+        float margin = 25;
+        Document document = new Document(PageSize.A4, margin, margin, margin, margin);
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+            document.open();
+
+            Image logoImage = Image.getInstance(Constants.AMAR_AMI_LOGO_WHITE);
+            Font largeFont = new Font(Font.FontFamily.TIMES_ROMAN, 15f, Font.NORMAL, BaseColor.BLACK);
+            Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.NORMAL, BaseColor.BLACK);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 13f, Font.BOLD, BaseColor.BLACK);
+
+
+            logoImage.setAlignment(Element.ALIGN_LEFT);
+
+            PdfPTable imageTable = new PdfPTable(2);
+            imageTable.setWidthPercentage(100);
+            imageTable.setWidths(new int[]{1, 6});
+
+            PdfPCell imageCell = new PdfPCell();
+            imageCell.addElement(logoImage);
+            imageCell.setBorder(PdfPCell.NO_BORDER);
+            imageTable.addCell(imageCell);
+
+            PdfPCell textCell = new PdfPCell();
+            Paragraph paragraph = new Paragraph("Amar Ami\n", largeFont);
+            paragraph.add(new Chunk("Talent Evaluation Exam - 2020\n", largeFont));
+            paragraph.add(new Chunk("Prize Giving List", largeFont));
+            paragraph.setAlignment(Element.ALIGN_CENTER);
+            textCell.addElement(paragraph);
+            textCell.setBorder(Rectangle.NO_BORDER);
+
+
+            imageTable.addCell(textCell);
+            imageTable.setSpacingAfter(SPACING);
+            document.add(imageTable);
+
+            int totalStudentsCovered = 0;
+            for (int k=0; k<studentNumberList.length; k++) {
+                int studentNumber = studentNumberList[k];
+
+                Paragraph categoryParagraph = new Paragraph(category[k], boldFont);
+                categoryParagraph.setSpacingAfter(5);
+                categoryParagraph.setAlignment(Element.ALIGN_CENTER);
+                document.add(categoryParagraph);
+
+                PdfPTable table = new PdfPTable(5);
+                table.setWidthPercentage(100);
+                table.setWidths(new int[]{2, 10, 10, 3, 3});
+                table.setSpacingAfter(SPACING);
+
+                PdfPCell cell;
+
+                cell = new PdfPCell(new Phrase("Sl.", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Name", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("School", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Roll No.", normalFont));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Marks", normalFont));
+                table.addCell(cell);
+
+                int sl = 1;
+                for (int i=totalStudentsCovered; i<totalStudentsCovered+studentNumber; i++) {
+                    Student student = studentList.get(i);
+
+                    cell = new PdfPCell(new Phrase(sl + ".", normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(student.getName(), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(student.getSchoolName(), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(String.valueOf(student.getRoleNo()), normalFont));
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(String.valueOf(student.getMarks()), normalFont));
+                    table.addCell(cell);
+
+                    sl++;
+
+                }
+                document.add(table);
+                totalStudentsCovered += studentNumber;
+
+            }
+
+            document.close();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void generateAttendanceSheet(List<Student> studentList, String className, int[] distributionList, String[] roomNumberList, String filename) {
         float margin = 25;
         Document document = new Document(PageSize.A4, margin, margin, margin, margin);
@@ -298,7 +403,7 @@ public class ITextPdfDemo {
 
 
                 imageTable.addCell(textCell);
-                imageTable.setSpacingAfter(20);
+                imageTable.setSpacingAfter(SPACING);
 
                 PdfPTable table = new PdfPTable(6);
                 table.setWidthPercentage(100);
